@@ -1,4 +1,4 @@
-# covid19-exporter
+# Covid19-exporter
 covid-19 prometheus exporter
 
 # Requirements
