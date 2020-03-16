@@ -51,11 +51,14 @@ func (c *Client) GetCovid19Data() (GISDataResponse, error) {
 
 	req, error := http.NewRequest("GET", c.HttpEndpoint, nil)
 
+	if error != nil {
+		log.Errorln(error)
+	}
+
 	req.Header.Add("x-rapidapi-host", c.HostHeader)
 	req.Header.Add("x-rapidapi-key", c.APIKey)
 
 	resp, err := http.DefaultClient.Do(req)
-
 	if error != nil {
 		log.Errorln(error)
 	}

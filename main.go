@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/covid19-exporter/github.com/covid19-exporter/pkg/rapidapi"
+	"github.com/mjavier2k/covid19-exporter/pkg/rapidapi"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
@@ -128,7 +128,7 @@ func resolvePort() string {
 }
 
 func main() {
-	listenAddr := fmt.Sprintf("127.0.0.1:%v", resolvePort())
+	listenAddr := fmt.Sprintf("0.0.0.0:%v", resolvePort())
 
 	rapidAPIExporter, _ := NewCollector()
 	prometheus.MustRegister(rapidAPIExporter)
