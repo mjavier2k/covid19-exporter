@@ -5,15 +5,16 @@ covid-19 prometheus exporter
 
 1) Sign up on https://rapidapi.com/KishCom/api/covid-19-coronavirus-statistics 
 2) Get you API Key
-3) Create ENV variables
+3) Create .env file
 
 ```
-export X-RAPIDAPI-HOST: "covid-19-coronavirus-statistics.p.rapidapi.com"
-export X-RAPIDAPI-KEY: "YOUR-API-KEY"
+export RAPIDAPI_URL="https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/stats"
+export RAPIDAPI_HOST="covid-19-coronavirus-statistics.p.rapidapi.com"
+export RAPIDAPI_KEY="XXXXXXXX"
 ```
 
 
-# Metrics
+# Example Metrics
 
 ```
 covid19_deaths{country="Canada",province="Alberta"} 0
