@@ -46,3 +46,9 @@ covid19_recovered{country="Canada",province="Prince Edward Island"} 0
 covid19_recovered{country="Canada",province="Quebec"} 0
 covid19_recovered{country="Canada",province="Saskatchewan"} 0
 ```
+
+# Docker
+
+```
+ docker run --env-file=.env --rm -p 8080:9999 covid19:latest
+ ```
