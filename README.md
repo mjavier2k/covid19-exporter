@@ -1,5 +1,6 @@
 # Covid19-exporter
-covid-19 prometheus exporter
+
+Covid-19 Prometheus Exporter
 
 # Requirements
 
