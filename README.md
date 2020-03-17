@@ -50,5 +50,5 @@ covid19_recovered{country="Canada",province="Saskatchewan"} 0
 # Docker
 
 ```
- docker run --env-file=.env --rm -p 8080:9999 covid19:latest
+  docker run --env-file=.env --rm -p 8080:9999 mjavier/covid19-exporter:latest
  ```
