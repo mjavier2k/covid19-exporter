@@ -101,7 +101,7 @@ func (c *rapidAPICollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(
 			MetricDescriptions.DeathsCount,
 			prometheus.GaugeValue,
-			country.Recovered,
+			country.Deaths,
 			country.Country,
 			country.Province,
 		)
