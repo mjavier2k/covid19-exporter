@@ -2,7 +2,6 @@ package rapidapi
 
 import (
 	"net/http"
-	"time"
 )
 
 type Client struct {
@@ -12,19 +11,17 @@ type Client struct {
 	HttpClient   *http.Client
 }
 
-type GISDataResponse struct {
-	Error      bool   `json:"error"`
-	StatusCode int    `json:"statusCode"`
-	Message    string `json:"message"`
-	Data       struct {
-		LastChecked  time.Time `json:"lastChecked"`
-		Covid19Stats []struct {
-			Province   string  `json:"province"`
-			Country    string  `json:"country"`
-			LastUpdate string  `json:"lastUpdate"`
-			Confirmed  float64 `json:"confirmed"`
-			Deaths     float64 `json:"deaths"`
-			Recovered  float64 `json:"recovered"`
-		} `json:"covid19Stats"`
-	} `json:"data"`
+type GISDataResponse []struct {
+	FIPS          string  `json:"FIPS"`
+	Admin2        string  `json:"Admin2"`
+	ProvinceState string  `json:"Province_State"`
+	CountryRegion string  `json:"Country_Region"`
+	LastUpdate    string  `json:"Last_Update"`
+	Lat           string  `json:"Lat"`
+	Long          string  `json:"Long"`
+	Confirmed     float64 `json:"Confirmed"`
+	Deaths        float64 `json:"Deaths"`
+	Recovered     float64 `json:"Recovered"`
+	Active        float64 `json:"Active"`
+	CombinedKey   string  `json:"Combined_Key"`
 }

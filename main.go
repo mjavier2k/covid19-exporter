@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"sync"
 
 	"github.com/mjavier2k/covid19-exporter/pkg/rapidapi"
 	"github.com/prometheus/client_golang/prometheus"
@@ -16,12 +17,15 @@ type rapidAPICollector struct {
 	client *rapidapi.Client
 }
 
+var DataMux sync.Mutex
+
 type Descriptions struct {
 	ScrapeSuccessDesc *prometheus.Desc
 
 	ConfirmedCount *prometheus.Desc
 	RecoveredCount *prometheus.Desc
 	DeathsCount    *prometheus.Desc
+	ActiveCount    *prometheus.Desc
 }
 
 func NewMetricDescriptions(namespace string) *Descriptions {
@@ -37,21 +41,28 @@ func NewMetricDescriptions(namespace string) *Descriptions {
 	d.ConfirmedCount = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "infected"),
 		"Number of infection per country",
-		[]string{"country", "province"},
+		[]string{"country", "province", "county"},
 		nil,
 	)
 
 	d.RecoveredCount = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "recovered"),
 		"Number of infection per country",
-		[]string{"country", "province"},
+		[]string{"country", "province", "county"},
 		nil,
 	)
 
 	d.DeathsCount = prometheus.NewDesc(
 		prometheus.BuildFQName(namespace, "", "deaths"),
 		"Number of deaths per country",
-		[]string{"country", "province"},
+		[]string{"country", "province", "county"},
+		nil,
+	)
+
+	d.ActiveCount = prometheus.NewDesc(
+		prometheus.BuildFQName(namespace, "", "active"),
+		"Number of active cases per country",
+		[]string{"country", "province", "county"},
 		nil,
 	)
 
@@ -70,6 +81,7 @@ func (c *rapidAPICollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- MetricDescriptions.ConfirmedCount
 	ch <- MetricDescriptions.RecoveredCount
 	ch <- MetricDescriptions.DeathsCount
+	ch <- MetricDescriptions.ActiveCount
 }
 
 func (c *rapidAPICollector) Collect(ch chan<- prometheus.Metric) {
@@ -81,29 +93,49 @@ func (c *rapidAPICollector) Collect(ch chan<- prometheus.Metric) {
 		log.Errorln(err)
 	}
 
-	for _, country := range result.Data.Covid19Stats {
+	for _, country := range result {
+
+		if country.ProvinceState == "" {
+			country.ProvinceState = "A"
+			fmt.Println(fmt.Sprintf("%f %s %s", country.Confirmed, country.CountryRegion, country.ProvinceState))
+		}
+
+		// fmt.Sprintf("%s, %s", country.Admin2, country.ProvinceState),
+		// fmt.Printf(country.CountryRegion)
 		ch <- prometheus.MustNewConstMetric(
 			MetricDescriptions.ConfirmedCount,
 			prometheus.GaugeValue,
 			country.Confirmed,
-			country.Country,
-			country.Province,
+			country.CountryRegion,
+			country.ProvinceState,
+			country.Admin2,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			MetricDescriptions.RecoveredCount,
 			prometheus.GaugeValue,
 			country.Recovered,
-			country.Country,
-			country.Province,
+			country.CountryRegion,
+			country.ProvinceState,
+			country.Admin2,
 		)
 
 		ch <- prometheus.MustNewConstMetric(
 			MetricDescriptions.DeathsCount,
 			prometheus.GaugeValue,
 			country.Deaths,
-			country.Country,
-			country.Province,
+			country.CountryRegion,
+			country.ProvinceState,
+			country.Admin2,
+		)
+
+		ch <- prometheus.MustNewConstMetric(
+			MetricDescriptions.ActiveCount,
+			prometheus.GaugeValue,
+			country.Active,
+			country.CountryRegion,
+			country.ProvinceState,
+			country.Admin2,
 		)
 	}
 

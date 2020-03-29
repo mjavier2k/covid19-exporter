@@ -14,9 +14,7 @@ import (
 )
 
 const (
-	namespace  = "covid19"
-	sourceUrl  = "https://covid-19-coronavirus-statistics.p.rapidapi.com/v1/stats"
-	hostHeader = "covid-19-coronavirus-statistics.p.rapidapi.com"
+	namespace = "covid19"
 )
 
 func NewHTTPClient() *Client {
@@ -31,7 +29,7 @@ func NewHTTPClient() *Client {
 		log.Warningln("TLS certificate verification is currently disabled - This is not recommended.")
 	}
 
-	log.Infoln("RAPIDAPI_URL:", os.Getenv("RAPIDAPI_URL"))
+	log.Infoln("API_URL:", os.Getenv("API_URL"))
 
 	tr := &http.Transport{
 		TLSClientConfig: &tls.Config{InsecureSkipVerify: insecure},
@@ -41,9 +39,7 @@ func NewHTTPClient() *Client {
 			Transport: tr,
 			Timeout:   30 * time.Second,
 		},
-		HttpEndpoint: os.Getenv("RAPIDAPI_URL"),
-		HostHeader:   os.Getenv("RAPIDAPI_HOST"),
-		APIKey:       os.Getenv("RAPIDAPI_KEY"),
+		HttpEndpoint: os.Getenv("API_URL"),
 	}
 }
 
@@ -54,9 +50,6 @@ func (c *Client) GetCovid19Data() (GISDataResponse, error) {
 	if error != nil {
 		log.Errorln(error)
 	}
-
-	req.Header.Add("x-rapidapi-host", c.HostHeader)
-	req.Header.Add("x-rapidapi-key", c.APIKey)
 
 	resp, err := http.DefaultClient.Do(req)
 	if error != nil {
