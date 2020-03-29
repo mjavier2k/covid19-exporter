@@ -95,13 +95,6 @@ func (c *rapidAPICollector) Collect(ch chan<- prometheus.Metric) {
 
 	for _, country := range result {
 
-		if country.ProvinceState == "" {
-			country.ProvinceState = "A"
-			fmt.Println(fmt.Sprintf("%f %s %s", country.Confirmed, country.CountryRegion, country.ProvinceState))
-		}
-
-		// fmt.Sprintf("%s, %s", country.Admin2, country.ProvinceState),
-		// fmt.Printf(country.CountryRegion)
 		ch <- prometheus.MustNewConstMetric(
 			MetricDescriptions.ConfirmedCount,
 			prometheus.GaugeValue,
