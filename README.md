@@ -2,7 +2,7 @@
 
 Covid-19 Prometheus Exporter
 
-https://grafana.mjavier.ca/d/3G-9TO9Wz/canada?orgId=1
+Demo: https://grafana.mjavier.ca/
 
 # Requirements
 
