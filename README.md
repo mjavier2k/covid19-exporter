@@ -2,6 +2,8 @@
 
 Covid-19 Prometheus Exporter
 
+https://grafana.mjavier.ca/d/3G-9TO9Wz/canada?orgId=1
+
 # Requirements
 
 1) Sign up on https://rapidapi.com/KishCom/api/covid-19-coronavirus-statistics 
